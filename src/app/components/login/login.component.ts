@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
       .subscribe(data => {
         console.log("Is Login Success: " + data);
 
-        if (data) this.router.navigate(['/home']);
+        if (!!data) this.router.navigate(['/home']);
       });
   }
 
