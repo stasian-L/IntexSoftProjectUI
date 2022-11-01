@@ -23,4 +23,4 @@ import { SignUpComponent } from './sign-up.component';
     SignUpComponent
     ] 
 })
-export class SignUpComponent { }
+export class SignUpModule { }

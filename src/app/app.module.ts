@@ -8,7 +8,6 @@ import { HomeComponent } from './components/home/home.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { LoginModule } from './components/login/login.module';
-import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { SignUpModule } from './components/sign-up/sign-up.module';
 
 
