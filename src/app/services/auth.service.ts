@@ -11,10 +11,10 @@ export class AuthService {
    constructor(private http: HttpClient) { }
 
    isUserLoggedIn: boolean = false;
-   private url = '';
+   private url = 'http://localhost:8080';
 
    login(userName?: string, password?: string): Observable<UserModel> {
-      return this.http.post<UserModel>(this.url, { userName, password });
+      return this.http.post<UserModel>(this.url + '/sign-in', { userName, password });
 
       // this.isUserLoggedIn = userName == 'admin' && password == 'admin';
       // localStorage.setItem('isUserLoggedIn', this.isUserLoggedIn ? "true" : "false");
@@ -28,8 +28,8 @@ export class AuthService {
    }
 
    register(username: string, email: string, password: string) {
-      return this.http.post<UserModel>(`${this.url}/register`, { username, email, password });
-    }
+      return this.http.post<UserModel>(`${this.url}/sign-up`, { username, email, password });
+   }
 
    logout(): void {
       this.isUserLoggedIn = false;
