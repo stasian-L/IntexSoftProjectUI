@@ -13,8 +13,8 @@ export class AuthService {
    isUserLoggedIn: boolean = false;
    private url = 'http://localhost:8080';
 
-   login(userName?: string, password?: string): Observable<UserModel> {
-      return this.http.post<UserModel>(this.url + '/sign-in', { userName, password });
+   login(username?: string, password?: string): Observable<UserModel> {
+      return this.http.post<UserModel>(this.url + '/sign-in', { username, password });
 
       // this.isUserLoggedIn = userName == 'admin' && password == 'admin';
       // localStorage.setItem('isUserLoggedIn', this.isUserLoggedIn ? "true" : "false");
