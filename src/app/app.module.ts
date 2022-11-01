@@ -9,6 +9,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { LoginModule } from './components/login/login.module';
 import { SignUpModule } from './components/sign-up/sign-up.module';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { SignUpModule } from './components/sign-up/sign-up.module';
     //SignUpModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
