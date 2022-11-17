@@ -18,12 +18,12 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.formData = new FormGroup({
-      username: new FormControl("",Validators.required),
-      password: new FormControl("",Validators.required),
+      username: new FormControl("", Validators.required),
+      password: new FormControl("", Validators.required),
     });
   }
 
-  onSubmit(data: any) {
+  onSubmit() {
     this.username = this.formData.get('username')?.value;
     this.password = this.formData.get('password')?.value;
 
@@ -38,7 +38,9 @@ export class LoginComponent implements OnInit {
       });
   }
 
-
+  route() {
+    this.router.navigate(['/sign-up']);
+  }
 
 
 }

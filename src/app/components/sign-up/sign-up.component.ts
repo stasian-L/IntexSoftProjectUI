@@ -20,7 +20,7 @@ export class SignUpComponent implements OnInit {
     this.formData = new FormGroup({
       username: new FormControl("", Validators.required),
       password: new FormControl("", Validators.required),
-      email: new FormControl("", Validators.required),
+      email: new FormControl("", [Validators.required, Validators.email]),
 
     });
   }
@@ -38,8 +38,11 @@ export class SignUpComponent implements OnInit {
       .subscribe(data => {
         console.log("Is Login Success: " + data);
 
-        if (data) this.router.navigate(['/home']);
+        if (data) this.router.navigate(['/login']);
       });
   }
 
+  route() {
+    this.router.navigate(['/login']);
+  }
 }

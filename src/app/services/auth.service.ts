@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { delay, Observable, of, tap } from 'rxjs';
 import { UserModel } from '../models/user.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+const httpOptions = {
+   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 
 @Injectable({
    providedIn: 'root'
@@ -15,8 +19,8 @@ export class AuthService {
 
    login(username?: string, password?: string): Observable<UserModel> {
       this.isUserLoggedIn = true;
-      
-      return this.http.post<UserModel>(this.url + '/sign-in', { username, password });
+
+      return this.http.post<UserModel>(this.url + '/sign-in', { username, password }, httpOptions);
 
       // localStorage.setItem('isUserLoggedIn', this.isUserLoggedIn ? "true" : "false");
 
@@ -29,7 +33,8 @@ export class AuthService {
    }
 
    register(username: string, email: string, password: string) {
-      return this.http.post<UserModel>(`${this.url}/sign-up`, { username, email, password });
+      this.isUserLoggedIn = true;
+      return this.http.post<UserModel>(`${this.url}/sign-up`, { username, email, password }, httpOptions);
    }
 
    logout(): void {
