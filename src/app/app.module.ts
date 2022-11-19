@@ -9,7 +9,8 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { LoginModule } from './components/login/login.module';
 import { SignUpModule } from './components/sign-up/sign-up.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './shared/token.interceptor';
 
 
 @NgModule({
@@ -20,12 +21,17 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     LoginModule,
-    //SignUpModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { delay, Observable, of, tap } from 'rxjs';
-import { UserModel } from '../models/user.model';
+import { catchError, map, mapTo, Observable, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Tokens } from '../models/tokens.model';
 
 const httpOptions = {
    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -11,34 +11,85 @@ const httpOptions = {
    providedIn: 'root'
 })
 export class AuthService {
+   private readonly ACCES_TOKEN = 'JWT_TOKEN';
+   private readonly REFRESH_TOKEN = 'REFRESH_TOKEN';
+   private loggedUser: string | null;
+   private url = 'http://localhost:8080';
 
    constructor(private http: HttpClient) { }
 
-   isUserLoggedIn: boolean = false;
-   private url = 'http://localhost:8080';
+   login(username: string, password: string): Observable<boolean> {
+      return this.http.post<any>(this.url + '/sign-in', { username, password })
+         .pipe(
+            tap(tokens => this.doLoginUser(username, tokens)),
+            map(() => true),
+            catchError(error => {
+               alert(error.error);
+               return of(false);
+            }
+            ));
+   }
 
-   login(username?: string, password?: string): Observable<UserModel> {
-      this.isUserLoggedIn = true;
+   doLoginUser(username: string, tokens: Tokens): void {
+      this.loggedUser = username;
+      this.storeTokens(tokens);
+   }
 
-      return this.http.post<UserModel>(this.url + '/sign-in', { username, password }, httpOptions);
-
-      // localStorage.setItem('isUserLoggedIn', this.isUserLoggedIn ? "true" : "false");
-
-      // return of(this.isUserLoggedIn).pipe(
-      //    delay(1000),
-      //    tap(val => {
-      //       console.log("Is User Authentication is successful: " + val);
-      //    })
-      // );
+   storeTokens(tokens: Tokens) {
+      localStorage.setItem(this.ACCES_TOKEN, tokens.accesToken);
+      localStorage.setItem(this.REFRESH_TOKEN, tokens.refreshToken);
    }
 
    register(username: string, email: string, password: string) {
-      this.isUserLoggedIn = true;
-      return this.http.post<UserModel>(`${this.url}/sign-up`, { username, email, password }, httpOptions);
+      return this.http.post(`${this.url}/sign-up`, { username, email, password }, httpOptions);
    }
 
-   logout(): void {
-      this.isUserLoggedIn = false;
+   logout(): Observable<boolean> {
       localStorage.removeItem('isUserLoggedIn');
+
+      return this.http.post<any>(`${this.url}/logout`, {
+         'refreshToken': this.getRefreshToken()
+      }).pipe(
+         tap(() => this.doLogoutUser()),
+         map(() => true),
+         catchError(error => {
+            alert(error.error);
+            return of(false);
+         }));
+
+   }
+
+   isLoggedIn() {
+      return !!this.getAccesToken();
+   }
+
+   refreshToken() {
+      return this.http.post<any>(`${this.url}/refresh`, {
+         'refreshToken': this.getRefreshToken()
+      }).pipe(tap((tokens: Tokens) => {
+            this.storeAccesToken(tokens.accesToken);
+         }));
+   }
+
+   storeAccesToken(accesToken: any) {
+      localStorage.setItem(this.ACCES_TOKEN, accesToken);
+   }
+
+   getAccesToken(): string | null {
+      return localStorage.getItem(this.ACCES_TOKEN);
+   }
+
+   doLogoutUser(): void {
+      this.loggedUser = null;
+      this.removeTokens();
+   }
+
+   removeTokens() {
+      localStorage.removeItem(this.ACCES_TOKEN);
+      localStorage.removeItem(this.REFRESH_TOKEN);
+   }
+
+   getRefreshToken() {
+      return localStorage.getItem(this.REFRESH_TOKEN);
    }
 }
