@@ -11,17 +11,20 @@ import { LoginModule } from './components/login/login.module';
 import { SignUpModule } from './components/sign-up/sign-up.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './shared/token.interceptor';
-
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
     LoginModule,
     AppRoutingModule,
+    MatToolbarModule,
     BrowserAnimationsModule,
     HttpClientModule,
   ],

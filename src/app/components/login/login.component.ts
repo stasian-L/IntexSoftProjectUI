@@ -9,7 +9,6 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-
   username: string;
   password: string;
   formData: FormGroup;
@@ -27,9 +26,6 @@ export class LoginComponent implements OnInit {
     this.username = this.formData.get('username')?.value;
     this.password = this.formData.get('password')?.value;
 
-    console.log("Login page: " + this.username);
-    console.log("Login page: " + this.password);
-
     this.authService.login(this.username, this.password)
       .subscribe(data => {
         console.log("Is Login Success: " + data);
@@ -41,7 +37,5 @@ export class LoginComponent implements OnInit {
   route() {
     this.router.navigate(['/sign-up']);
   }
-
-
 }
 

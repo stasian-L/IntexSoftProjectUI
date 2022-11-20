@@ -3,10 +3,6 @@ import { catchError, map, mapTo, Observable, of, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Tokens } from '../models/tokens.model';
 
-const httpOptions = {
-   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
-
 @Injectable({
    providedIn: 'root'
 })
@@ -30,20 +26,6 @@ export class AuthService {
             ));
    }
 
-   doLoginUser(username: string, tokens: Tokens): void {
-      this.loggedUser = username;
-      this.storeTokens(tokens);
-   }
-
-   storeTokens(tokens: Tokens) {
-      localStorage.setItem(this.ACCES_TOKEN, tokens.accesToken);
-      localStorage.setItem(this.REFRESH_TOKEN, tokens.refreshToken);
-   }
-
-   register(username: string, email: string, password: string) {
-      return this.http.post(`${this.url}/sign-up`, { username, email, password }, httpOptions);
-   }
-
    logout(): Observable<boolean> {
       localStorage.removeItem('isUserLoggedIn');
 
@@ -57,6 +39,20 @@ export class AuthService {
             return of(false);
          }));
 
+   }
+
+   doLoginUser(username: string, tokens: Tokens): void {
+      this.loggedUser = username;
+      this.storeTokens(tokens);
+   }
+
+   storeTokens(tokens: Tokens) {
+      localStorage.setItem(this.ACCES_TOKEN, tokens.accesToken);
+      localStorage.setItem(this.REFRESH_TOKEN, tokens.refreshToken);
+   }
+
+   register(username: string, email: string, password: string) {
+      return this.http.post(`${this.url}/sign-up`, { username, email, password });
    }
 
    isLoggedIn() {
