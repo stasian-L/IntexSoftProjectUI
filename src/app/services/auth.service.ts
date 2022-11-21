@@ -14,10 +14,10 @@ export class AuthService {
 
    constructor(private http: HttpClient) { }
 
-   login(username: string, password: string): Observable<boolean> {
-      return this.http.post<any>(this.url + '/sign-in', { username, password })
+   login(data: string, password: string): Observable<boolean> {
+      return this.http.post<any>(this.url + '/sign-in', { data, password })
          .pipe(
-            tap(tokens => this.doLoginUser(username, tokens)),
+            tap(tokens => this.doLoginUser(data, tokens)),
             map(() => true),
             catchError(error => {
                alert(error.error);
@@ -41,8 +41,8 @@ export class AuthService {
 
    }
 
-   doLoginUser(username: string, tokens: Tokens): void {
-      this.loggedUser = username;
+   doLoginUser(data: string, tokens: Tokens): void {
+      this.loggedUser = data;
       this.storeTokens(tokens);
    }
 
@@ -63,8 +63,8 @@ export class AuthService {
       return this.http.post<any>(`${this.url}/refresh`, {
          'refreshToken': this.getRefreshToken()
       }).pipe(tap((tokens: Tokens) => {
-            this.storeAccesToken(tokens.accesToken);
-         }));
+         this.storeAccesToken(tokens.accesToken);
+      }));
    }
 
    storeAccesToken(accesToken: any) {
